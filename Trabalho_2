@@ -1,0 +1,14 @@
+#1) Faça função que calcule a área do trapézio, dados:#
+#a) Base maior#
+#b) Base menor#
+#c) Altura#
+#O programa principal deve pedir os valores e usar a função para calcular a área.#
+
+
+print ("Insira os dados para calcular a area de um trapezio.")
+base_maior = float(input("Digite o valor da base maior: "))
+base_menor = float(input("Digite o valor da base menor: "))
+altura = float(input("digite a altura do trapezio: "))
+divisao = 2
+calculo = ((base_maior + base_menor) * altura) / divisao
+print (f"A area do trapezio é igual a: {calculo}")

@@ -1,0 +1,176 @@
+from tkinter import                                                                                                                                            *
+from tkinter import Tk, ttk
+import sqlite3
+
+cor0 = "#f0f3f5"
+cor1 = "brown3"
+cor2 = "gold"
+cor3 = "#38576b"
+letra1 = "gold2"
+letra2 = "gray9"
+
+janela = Tk ()
+janela.title ("Food Time")
+janela.geometry('1360x750')
+janela.configure(background=cor1)
+janela.resizable(True, True)
+
+frame_cima = Frame(janela,width=310, height=250,bg=cor1, relief="flat")
+frame_cima.grid(row=0, column=0,pady=1, padx=495, sticky=NSEW)
+frame_baixo = Frame(janela,width=310, height=3000,bg=cor1, relief="flat")
+frame_baixo.grid(row=1, column=0,pady=1, padx=490, sticky=NSEW)
+
+l_nome = Label(frame_cima, text="LOGIN", height=1,anchor=NE, font=('Ivy 25 '), bg=cor1, fg=letra2)
+l_nome.place(x=95, y=5)
+
+l_linha = Label(frame_cima,width=275, text="", height=1,anchor=NW, font=('Ivy 1 '), bg=cor2)
+l_linha.place(x=10, y=45)
+
+l_nome = Label(frame_baixo, text="Nome *", height=1,anchor=NW, font=('Ivy 10 bold'), bg=cor1, fg=letra1)
+l_nome.place(x=10, y=20)
+e_nome = Entry(frame_baixo, width=25, justify='left',font=("",15),highlightthickness=1, relief="solid")
+e_nome.place(x=14, y=50)
+
+l_pass = Label(frame_baixo, text="password *", height=1,anchor=NW, font=('Ivy 10 bold'), bg=cor1, fg=letra1)
+l_pass.place(x=10, y=95)
+e_pass = Entry(frame_baixo,show='*',width=25, justify='left',font=("",15),highlightthickness=1,relief="solid")
+e_pass.place(x=15, y=130)
+
+botao_confirmar = Button(frame_baixo, text="Entrar", width=39, height=2, bg=cor2, fg=cor1, font=('Ivy 8 bold'), relief=RAISED, overrelief=RIDGE)
+botao_confirmar.place(x=15, y=180)
+
+
+
+esqueceu_senha = Button(frame_baixo, text="Esqueci A Senha",  width=19, height=2, bg=cor2, fg=cor1, font=('Ivy 8 bold'), relief=RAISED, overrelief=RIDGE)
+esqueceu_senha.place(x=80, y=230)
+
+def abrir_janela():
+    janela1 = tk.Toplevel()
+    janela1.title("Cadastro")
+    janela1.configure(background=cor1)
+    janela1.geometry("600x300")
+
+
+
+    def inserir_usuario(nome, email, data_nasc, celular, sexo, senha):
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
+        c.execute("INSERT INTO usuarios (NOME, EMAIL, DATANASC, CELULAR, SEXO, SENHA) VALUES (?, ?, ?, ?, ?, ?)",
+                  (nome, email, data_nasc, celular, sexo, senha))
+        conn.commit()
+        conn.close()
+
+    NOME_label = tk.Label(janela1, text="Nome", bg=cor1, fg=letra1)
+    NOME_label.pack()
+
+    NOME_entry = tk.Entry(janela1, bg=cor0, fg=letra1)
+    NOME_entry.pack()
+
+    email_label = tk.Label(janela1, text="E-mail", bg=cor1, fg=letra1)
+    email_label.pack()
+
+    email_entry = tk.Entry(janela1, bg=cor0, fg=letra1)
+    email_entry.pack()
+
+    celular_label = tk.Label(janela1, text="Celular", bg=cor1, fg=letra1)
+    celular_label.pack()
+
+    celular_entry = tk.Entry(janela1, bg=cor0, fg=letra1)
+    celular_entry.pack()
+
+    nascimento_label = tk.Label(janela1, text="Data de nascimento", bg=cor1, fg=letra1)
+    nascimento_label.pack()
+
+    nascimento_label_entry = tk.Entry(janela1, bg=cor0, fg=letra1)
+    nascimento_label_entry.pack()
+
+    genero_label = tk.Label(janela1, text="Gênero", bg=cor1, fg=letra1)
+    genero_label.pack()
+
+    genero_entry = tk.Entry(janela1, bg=cor0, fg=letra1)
+    genero_entry.pack()
+
+    senha_label = tk.Label(janela1, text="Senha", bg=cor1, fg=letra1)
+    senha_label.pack()
+
+    senha_entry = tk.Entry(janela1, bg=cor0, fg=letra1)
+    senha_entry.pack()
+
+    botao_enviar = tk.Button(janela1, text="Enviar", bg=cor2, fg=cor1,
+                             command=lambda: (inserir_usuario(NOME_entry.get(), email_entry.get(),
+                                                              nascimento_label_entry.get(), celular_entry.get(),
+                                                              genero_entry.get(), senha_entry.get()),
+                                              messagebox.showinfo('Cadastro', 'Cadastro feito com sucesso!'),
+                                              janela1.destroy()), width=15, height=1)
+    botao_enviar.pack()
+
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS usuarios
+    (ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    NOME TEXT NOT NULL,
+    EMAIL TEXT NOT NULL,
+    DATANASC TEXT NOT NULL,
+    CELULAR TEXT,
+    SEXO TEXT NOT NULL,
+    SENHA TEXT NOT NULL);''')
+    conn.commit()
+    conn.close()
+
+    janela1.mainloop()
+
+
+nova_conta = Button(frame_baixo, text="Cadastro", command=abrir_janela, bg=cor1, fg=letra2, font=('Ivy 8 bold'), relief=RAISED, overrelief=RIDGE)
+nova_conta.place(x=121, y=350)
+
+l_nome = Label(frame_baixo, text="", height=1,anchor=NW, font=('Ivy 10 bold'), bg=cor1, fg=letra1)
+l_nome.place(x=124, y=385)
+
+def verificar_senha():
+    nome = e_nome.get()
+    senha = str(e_pass.get())
+
+    if nome=='admin' and senha=='admin':
+        messagebox.showinfo('Login',' Seja bem vindo Admin !!!')
+
+    elif credenciais[0] == nome and credenciais[1] == senha:
+        messagebox.showinfo('Login',' Seja bem vindo de volta '+credenciais[0])
+    else:
+        messagebox_label.config('Erro', 'Verifique o nome de usuario ou a palavra passe')
+
+botao_confirmar = Button(frame_baixo, command=verificar_senha, text="Entrar", width=39, height=2, bg=cor2, fg=cor1, font=('Ivy 8 bold'), relief=RAISED, overrelief=RIDGE)
+botao_confirmar.place(x=15, y=180)
+
+def nova_janela():
+    l_nome = Label(frame_cima, text="Usuario: " + credenciais[0], height=1,anchor=NE, font=('Ivy 20 '), bg=cor1, fg=letra1)
+    l_nome.place(x=5, y=5)
+
+    l_linha = Label(frame_cima,width=275, text="", height=1,anchor=NW, font=('Ivy 1 '), bg=cor2)
+    l_linha.place(x=10, y=45)
+
+    l_nome = Label(frame_baixo, text="Seja bem vindo " + credenciais[0], height=1,anchor=NE, font=('Ivy 15 '), bg=cor1, fg=cor4)
+    l_nome.place(x=5, y=105)
+
+def verificar_senha():
+    nome = e_nome.get()
+    senha = str(e_pass.get())
+
+    if nome=='admin' and senha=='admin':
+        messagebox.showinfo('Login',' Seja bem vindo Admin !!!')
+
+    elif credenciais[0] == nome and credenciais[1] == senha:
+        messagebox.showinfo('Login',' Seja bem vindo de volta '+credenciais[0])
+
+        for widget in frame_baixo.winfo_children():
+            widget.destroy()
+
+        for widget in frame_cima.winfo_children():
+            widget.destroy()
+
+        nova_janela()
+    else:
+        messagebox.showwarning('Erro', 'Verifique o nome de usuario ou a palavra passe')
+
+import tkinter as tk
+
+janela.mainloop()
